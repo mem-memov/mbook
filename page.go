@@ -1,7 +1,5 @@
 package mbook
 
-import "fmt"
-
 type page struct {
 	position uint
 	height uint
@@ -10,7 +8,8 @@ type page struct {
 	column []byte
 }
 
-func newPage(position uint, height uint, width uint) (*page, error) {
+func newPage(position uint, height uint) *page {
+	width := calculateWidth(position, height)
 	size := height * width
 
 	var column []byte
@@ -24,14 +23,10 @@ func newPage(position uint, height uint, width uint) (*page, error) {
 		width: width,
 		size: size,
 		column: column,
-	}, nil
+	}
 }
 
-func (p *page) Write(position uint, value uint) error {
-	if position < p.position {
-		return fmt.Errorf("position %v outside of page", position)
-	}
-
+func (p *page) Write(position uint, value uint) {
 	offset := (position - p.position) * p.width + p.width - 1
 	beforeShift := value
 	for i := uint(0); i < p.width; i++ {
@@ -39,15 +34,23 @@ func (p *page) Write(position uint, value uint) error {
 		p.column[offset - i] = byte(beforeShift - afterShift)
 		beforeShift = afterShift >> 8
 	}
-	return nil
 }
 
-func (p *page) Read(position uint) (uint, error) {
+func (p *page) Read(position uint) uint {
 	offset := (position - p.position) * p.width
 	value := uint(0)
 	for i := uint(0); i < p.width; i++ {
 		byteValue := uint(p.column[offset + i])
 		value = (value << 8) + byteValue
 	}
-	return value, nil
+	return value
+}
+
+func calculateWidth(position uint, height uint) uint {
+	lastPosition := position + height
+	i := uint(0)
+	for ; lastPosition > 0; i++ {
+		lastPosition <<= 8
+	}
+	return i
 }
