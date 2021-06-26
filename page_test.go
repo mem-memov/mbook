@@ -26,8 +26,8 @@ func TestPage(t *testing.T) {
 			fillPage(p, 1, t)
 			writeOneValue(p, 1, t)
 
-			fillPage(p, d.height, t)
-			writeOneValue(p, d.height, t)
+			fillPage(p, d.height-1, t)
+			writeOneValue(p, d.height-1, t)
 		})
 	}
 }

@@ -12,10 +12,14 @@ func NewBook(height uint) (*Book, error) {
 		return nil, fmt.Errorf("zero book height not allowed")
 	}
 
-	return &Book {
+	book := &Book {
 		height: height,
 		pages: make([]page, 0),
-	}, nil
+	}
+
+	book.addPage(0)
+
+	return book, nil
 }
 
 func (b *Book) Write(position uint, value uint) {
