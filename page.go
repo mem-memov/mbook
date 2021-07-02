@@ -28,9 +28,13 @@ func newPage(position uint, height uint) *page {
 }
 
 func (p *page) Write(position uint, value uint) {
-	offset := (position-p.position)*p.width + p.width - 1
+	offset := (position - p.position) * p.width + p.width - 1 // last byte goes first, as it contains the little end
 	beforeShift := value
 	for i := uint(0); i < p.width; i++ {
+		if beforeShift == 0 {
+			p.column[offset-i] = byte(0)
+			continue
+		}
 		afterShift := (beforeShift >> 8) << 8
 		p.column[offset-i] = byte(beforeShift - afterShift)
 		beforeShift = afterShift >> 8
