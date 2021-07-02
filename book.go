@@ -4,7 +4,7 @@ import "fmt"
 
 type Book struct {
 	height uint
-	pages []page
+	pages  []page
 }
 
 func NewBook(height uint) (*Book, error) {
@@ -12,9 +12,9 @@ func NewBook(height uint) (*Book, error) {
 		return nil, fmt.Errorf("zero book height not allowed")
 	}
 
-	book := &Book {
+	book := &Book{
 		height: height,
-		pages: make([]page, 0),
+		pages:  make([]page, 0),
 	}
 
 	book.addPage(0)
@@ -54,7 +54,7 @@ func (b *Book) addPage(position uint) {
 	b.pages = append(b.pages, *page)
 }
 
-func  (b *Book) countPages() uint {
+func (b *Book) countPages() uint {
 	return uint(len(b.pages))
 }
 

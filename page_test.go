@@ -3,24 +3,24 @@ package mbook
 import "testing"
 
 func TestPage(t *testing.T) {
-	data := []struct{
-		name string
+	data := []struct {
+		name     string
 		position uint
-		height uint
+		height   uint
 	}{
 		{"empty page", 0, 0},
 		{"one byte page one column", 0, 1},
 		{"one byte page one column shifted", 10, 1},
 		{"one byte page max columns", 0, 256},
-		{"one byte page max columns shifted", 10, 256-10},
+		{"one byte page max columns shifted", 10, 256 - 10},
 		{"two byte page one column", 0, 1},
 		{"two byte page one column shifted", 10, 1},
 		{"two byte page max columns", 0, 65536},
-		{"two byte page max columns shifted", 10, 65536-10},
+		{"two byte page max columns shifted", 10, 65536 - 10},
 	}
 
 	for _, d := range data {
-		t.Run(d.name, func (t *testing.T) {
+		t.Run(d.name, func(t *testing.T) {
 			p := newPage(d.position, d.height)
 
 			fillPage(p, 1, t)
@@ -53,26 +53,26 @@ func fillPage(p *page, value uint, t *testing.T) {
 func writeOneInHead(p *page, value uint, span uint, t *testing.T) {
 	for h := uint(0); h < span; h++ {
 		fillHead(p, 0, span, t)
-		checkModification(p, p.position + h, value, t)
+		checkModification(p, p.position+h, value, t)
 	}
 }
 
 func fillHead(p *page, value uint, span uint, t *testing.T) {
 	for h := uint(0); h < span; h++ {
-		checkModification(p, p.position + h, value, t)
+		checkModification(p, p.position+h, value, t)
 	}
 }
 
 func writeOneInTail(p *page, value uint, span uint, t *testing.T) {
 	for h := p.height - span; h < p.height; h++ {
 		fillTail(p, 0, span, t)
-		checkModification(p, p.position + h, value, t)
+		checkModification(p, p.position+h, value, t)
 	}
 }
 
 func fillTail(p *page, value uint, span uint, t *testing.T) {
 	for h := p.height - span; h < p.height; h++ {
-		checkModification(p, p.position + h, value, t)
+		checkModification(p, p.position+h, value, t)
 	}
 }
 
