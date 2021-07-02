@@ -9,9 +9,11 @@ func TestCalculateWidth(t *testing.T) {
 		height   uint
 		expected uint
 	}{
-		{"minimum width, first position", 0, 1, 1},
-		{"minimum width, last position", 255, 1, 1},
-		//{"width one, last position", 256, 1, 2},
+		{"one line, one byte width, min value", 0, 1, 1},
+		{"one line, one byte width, man value", 254, 1, 1},
+		{"one line, two byte width, min value", 255, 1, 2},
+		{"one line, two byte width, max value", 65534, 1, 2},
+		{"one line, three byte width, min value", 65535, 1, 3},
 	}
 
 	for _, d := range data {
